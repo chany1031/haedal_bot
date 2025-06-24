@@ -67,57 +67,81 @@ class TradingEngine:
             logger.error(f"Error fetching candles: {e}")
             return None
     
-    def calculate_indicators(self, df):
-        """Calculate technical indicators"""
-        try:
-            if df is None or df.empty:
-                return None
-            
-            # Exponential Moving Averages
-            df[f'EMA{self.ema_short}'] = EMAIndicator(
-                df['close'], window=self.ema_short
-            ).ema_indicator()
-            
-            df[f'EMA{self.ema_long}'] = EMAIndicator(
-                df['close'], window=self.ema_long
-            ).ema_indicator()
-            
-            # For backward compatibility
-            df['SMA20'] = df[f'EMA{self.ema_short}']
-            df['SMA50'] = df[f'EMA{self.ema_long}']
-            
-            # MACD
-            macd = MACD(
-                df['close'], 
-                window_fast=self.macd_fast,
-                window_slow=self.macd_slow,
-                window_sign=self.macd_signal
-            )
-            df['MACD'] = macd.macd()
-            df['MACD_signal'] = macd.macd_signal()
-            df['MACD_histogram'] = macd.macd_diff()
-            
-            # RSI
-            df['RSI'] = RSIIndicator(
-                df['close'], window=self.rsi_period
-            ).rsi()
-            
-            # ATR
-            df['ATR'] = AverageTrueRange(
-                df['high'], df['low'], df['close'], window=self.atr_period
-            ).average_true_range()
-            
-            # OBV (On-Balance Volume)
-            df['OBV'] = OnBalanceVolumeIndicator(
-                df['close'], df['base_vol']
-            ).on_balance_volume()
-            
-            logger.info("Technical indicators calculated successfully")
-            return df
-            
-        except Exception as e:
-            logger.error(f"Error calculating indicators: {e}")
+   def calculate_indicators(self, df):
+    """Calculate technical indicators with proper NaN handling"""
+    try:
+        if df is None or df.empty:
+            logger.warning("DataFrame is None or empty")
             return None
+
+        # 충분한 데이터 길이 확인
+        min_required = max(self.ema_long, self.macd_slow, self.rsi_period, self.atr_period)
+        if len(df) < min_required:
+            logger.warning(f"Insufficient data rows ({len(df)}); minimum required: {min_required}")
+            return None
+
+        # EMA
+        df[f'EMA{self.ema_short}'] = EMAIndicator(
+            df['close'], window=self.ema_short
+        ).ema_indicator()
+
+        df[f'EMA{self.ema_long}'] = EMAIndicator(
+            df['close'], window=self.ema_long
+        ).ema_indicator()
+
+        # Alias for compatibility
+        df['SMA20'] = df[f'EMA{self.ema_short}']
+        df['SMA50'] = df[f'EMA{self.ema_long}']
+
+        # MACD
+        macd = MACD(
+            df['close'],
+            window_fast=self.macd_fast,
+            window_slow=self.macd_slow,
+            window_sign=self.macd_signal
+        )
+        df['MACD'] = macd.macd()
+        df['MACD_signal'] = macd.macd_signal()
+        df['MACD_histogram'] = macd.macd_diff()
+
+        # RSI
+        df['RSI'] = RSIIndicator(
+            df['close'], window=self.rsi_period
+        ).rsi()
+
+        # ATR
+        df['ATR'] = AverageTrueRange(
+            df['high'], df['low'], df['close'], window=self.atr_period
+        ).average_true_range()
+
+        # OBV
+        df['OBV'] = OnBalanceVolumeIndicator(
+            df['close'], df['base_vol']
+        ).on_balance_volume()
+
+        # 필요한 컬럼 정의
+        required_cols = [
+            f'EMA{self.ema_short}', f'EMA{self.ema_long}',
+            'MACD', 'MACD_signal', 'MACD_histogram',
+            'RSI', 'ATR', 'OBV'
+        ]
+
+        # NaN 제거
+        initial_len = len(df)
+        df.dropna(subset=required_cols, inplace=True)
+        final_len = len(df)
+        if final_len < initial_len:
+            logger.warning(f"Dropped {initial_len - final_len} rows with NaN in indicators")
+
+        # 인덱스 재정렬
+        df = df.reset_index(drop=True)
+
+        logger.info("Technical indicators calculated and cleaned successfully")
+        return df
+
+    except Exception as e:
+        logger.error(f"Error calculating indicators: {e}")
+        return None
     
     def generate_signal(self, df):
         """Generate trading signals based on technical analysis"""
