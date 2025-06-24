@@ -110,8 +110,8 @@ class TradingEngine:
 
             latest = df.iloc[-1]
             prev = df.iloc[-2]
-        
-               required_cols = ['SMA20', 'SMA50', 'MACD', 'MACD_signal', 'RSI', 'OBV']
+
+            required_cols = ['SMA20', 'SMA50', 'MACD', 'MACD_signal', 'RSI', 'OBV']
             if any(pd.isna(latest[col]) for col in required_cols):
                 logger.warning("Missing indicator values, returning HOLD")
                 return 'HOLD'
@@ -171,11 +171,11 @@ class TradingEngine:
             return None, None, None
 
     def get_market_summary(self, df):
-    """Get current market summary"""
-    try:
-        if df is None or len(df) < 2:
-            logger.warning("Insufficient data for market summary")
-            return None
+        """Get current market summary"""
+        try:
+            if df is None or len(df) < 2:
+                logger.warning("Insufficient data for market summary")
+                return None
 
             latest = df.iloc[-1]
             prev = df.iloc[-2]
