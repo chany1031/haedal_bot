@@ -161,4 +161,12 @@ def main():
         print("Thank you for using the ETH Trading Signal System!")
 
 if __name__ == "__main__":
-    main()
+    if __name__ == '__main__':
+    t = threading.Thread(target=run_bot_loop)
+    t.daemon = True
+    t.start()
+    
+    # Render가 할당한 포트를 받아서 Flask에 전달
+    import os
+    port = int(os.environ.get("PORT", 10000))  # default는 10000
+    app.run(host='0.0.0.0', port=port)
