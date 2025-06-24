@@ -108,8 +108,8 @@ class TradingEngine:
             logger.warning("Insufficient data for signal generation")
             return 'HOLD'
 
-        latest = df.iloc[-1]
-        prev = df.iloc[-2]
+            latest = df.iloc[-1]
+            prev = df.iloc[-2]
         
             required_cols = ['SMA20', 'SMA50', 'MACD', 'MACD_signal', 'RSI', 'OBV']
             if any(pd.isna(latest[col]) for col in required_cols):
@@ -177,8 +177,8 @@ class TradingEngine:
             logger.warning("Insufficient data for market summary")
             return None
 
-        latest = df.iloc[-1]
-        prev = df.iloc[-2]
+            latest = df.iloc[-1]
+            prev = df.iloc[-2]
 
             price_change = latest['close'] - prev['close']
             price_change_pct = (price_change / prev['close']) * 100
