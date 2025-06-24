@@ -102,7 +102,7 @@ class TradingEngine:
             return None
 
     def generate_signal(self, df):
-    """Generate trading signals based on technical analysis"""
+        """Generate trading signals based on technical analysis"""
     try:
         if df is None or len(df) < 2:
             logger.warning("Insufficient data for signal generation")
