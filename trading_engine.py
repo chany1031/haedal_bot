@@ -143,6 +143,7 @@ class TradingEngine:
         logger.error(f"Error calculating indicators: {e}")
         return None
 
+
     
     def generate_signal(self, df):
         """Generate trading signals based on technical analysis"""
