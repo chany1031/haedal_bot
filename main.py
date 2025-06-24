@@ -4,6 +4,7 @@ Cryptocurrency Trading Signal System - Main Entry Point
 Real-time ETH/USDT futures technical analysis with Telegram alerts
 """
 
+import threading
 import os
 import time
 import logging
