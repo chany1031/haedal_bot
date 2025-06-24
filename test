@@ -1,0 +1,10 @@
+from telegram_bot import TelegramBot
+
+# 자신의 봇 토큰과 채팅 ID로 설정
+bot = TelegramBot(
+    token='7948838780:AAEoVUoJE6u554gr44dtX2z0MLXM9RCHV60',
+    chat_id='7121656236'  # 또는 정수형 ID (예: -123456789)
+)
+
+# 테스트 알림 보내기
+bot.send_message("✅ [TEST] 텔레그램 봇 알림 전송 성공!")
