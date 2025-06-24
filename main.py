@@ -23,8 +23,8 @@ def run_bot_loop():
     trading_engine = TradingEngine()
 
     # Initialize Telegram bot
-    token = os.getenv('TELEGRAM_BOT_TOKEN')
-    chat_id = os.getenv('TELEGRAM_CHAT_ID')
+    token = os.getenv('7940771673:AAFKV0d5JJIQ7yVfaQN7V8NzAYtugZyT4Ps')
+    chat_id = os.getenv('7121656236')
     telegram_bot = TelegramBot(token, chat_id) if token and chat_id else None
 
     if telegram_bot and telegram_bot.test_connection():
