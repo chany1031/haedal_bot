@@ -161,7 +161,6 @@ def main():
         print("Thank you for using the ETH Trading Signal System!")
 
 if __name__ == "__main__":
-    if __name__ == '__main__':
     t = threading.Thread(target=run_bot_loop)
     t.daemon = True
     t.start()
