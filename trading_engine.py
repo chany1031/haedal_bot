@@ -103,15 +103,15 @@ class TradingEngine:
 
     def generate_signal(self, df):
         """Generate trading signals based on technical analysis"""
-    try:
-        if df is None or len(df) < 2:
-            logger.warning("Insufficient data for signal generation")
-            return 'HOLD'
+        try:
+            if df is None or len(df) < 2:
+                logger.warning("Insufficient data for signal generation")
+                return 'HOLD'
 
             latest = df.iloc[-1]
             prev = df.iloc[-2]
         
-            required_cols = ['SMA20', 'SMA50', 'MACD', 'MACD_signal', 'RSI', 'OBV']
+               required_cols = ['SMA20', 'SMA50', 'MACD', 'MACD_signal', 'RSI', 'OBV']
             if any(pd.isna(latest[col]) for col in required_cols):
                 logger.warning("Missing indicator values, returning HOLD")
                 return 'HOLD'
