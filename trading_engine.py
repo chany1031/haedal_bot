@@ -68,7 +68,7 @@ class TradingEngine:
             return None
     
     def calculate_indicators(self, df):
-    """Calculate technical indicators with proper NaN handling"""
+        """Calculate technical indicators with proper NaN handling"""
     try:
         if df is None or df.empty:
             logger.warning("DataFrame is None or empty")
