@@ -67,7 +67,7 @@ class TradingEngine:
             logger.error(f"Error fetching candles: {e}")
             return None
     
-   def calculate_indicators(self, df):
+  def calculate_indicators(self, df):
     """Calculate technical indicators with proper NaN handling"""
     try:
         if df is None or df.empty:
@@ -142,6 +142,7 @@ class TradingEngine:
     except Exception as e:
         logger.error(f"Error calculating indicators: {e}")
         return None
+
     
     def generate_signal(self, df):
         """Generate trading signals based on technical analysis"""
