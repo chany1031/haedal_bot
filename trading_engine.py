@@ -102,14 +102,15 @@ class TradingEngine:
             return None
 
     def generate_signal(self, df):
-        """Generate trading signals based on technical analysis"""
-        try:
-            if df is None or len(df) < 2:
-                return 'HOLD'
+    """Generate trading signals based on technical analysis"""
+    try:
+        if df is None or len(df) < 2:
+            logger.warning("Insufficient data for signal generation")
+            return 'HOLD'
 
-            latest = df.iloc[-1]
-            prev = df.iloc[-2]
-
+        latest = df.iloc[-1]
+        prev = df.iloc[-2]
+        
             required_cols = ['SMA20', 'SMA50', 'MACD', 'MACD_signal', 'RSI', 'OBV']
             if any(pd.isna(latest[col]) for col in required_cols):
                 logger.warning("Missing indicator values, returning HOLD")
@@ -170,13 +171,14 @@ class TradingEngine:
             return None, None, None
 
     def get_market_summary(self, df):
-        """Get current market summary"""
-        try:
-            if df is None or df.empty:
-                return None
+    """Get current market summary"""
+    try:
+        if df is None or len(df) < 2:
+            logger.warning("Insufficient data for market summary")
+            return None
 
-            latest = df.iloc[-1]
-            prev = df.iloc[-2]
+        latest = df.iloc[-1]
+        prev = df.iloc[-2]
 
             price_change = latest['close'] - prev['close']
             price_change_pct = (price_change / prev['close']) * 100
