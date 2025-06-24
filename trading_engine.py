@@ -67,7 +67,7 @@ class TradingEngine:
             logger.error(f"Error fetching candles: {e}")
             return None
     
-  def calculate_indicators(self, df):
+   def calculate_indicators(self, df):
     """Calculate technical indicators with proper NaN handling"""
     try:
         if df is None or df.empty:
